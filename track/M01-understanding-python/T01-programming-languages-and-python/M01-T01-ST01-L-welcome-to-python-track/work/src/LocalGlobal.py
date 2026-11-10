@@ -10,5 +10,4 @@ def add():
     print("c==>",c)
 
 add()
-print("a+b==>",a+b)
 print("c==>",c)
