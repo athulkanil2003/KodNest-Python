@@ -29,7 +29,6 @@ stu_info = {
 print(stu_info["ravi"]["py"])   # Output: 78
 stu_info["ravi"]["py"] = 90
 print(stu_info["ravi"]["py"])   # Output: 90
-
 # Traversing
 for k, v in stu_info.items():
     print(k)
