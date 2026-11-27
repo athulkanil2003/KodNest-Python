@@ -1,0 +1,8 @@
+<p>contenteditable="True"</p>
+<h1 style="color: red"; text-align:center; backgroung-color: aqua>
+<a href="https://www.kodnest.com" target="_blank>click here to open new tab of kodnest.com</a>
+
+<div>--block level
+<span>---in line level
+
+<img src="location" width="200px" height="100px" > ---------Inline command
