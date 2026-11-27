@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learn HTML</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: #222; background: #f5f5f5; line-height: 1.5; }
+  header { background: #2a4d8f; color: #fff; padding: 14px 20px; }
+  header h1 { margin: 0; font-size: 22px; }
+  header p { margin: 2px 0 0; font-size: 14px; }
+  .wrap { display: flex; min-height: calc(100vh - 70px); }
+  nav { width: 240px; background: #fff; border-right: 1px solid #ccc; padding: 10px; flex-shrink: 0; }
+  nav h3 { margin: 14px 0 6px; font-size: 15px; }
+  nav button { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 6px 8px; font-size: 14px; cursor: pointer; border-radius: 3px; }
+  nav button:hover { background: #e8eefb; }
+  nav button.active { background: #2a4d8f; color: #fff; }
+  nav button.done::after { content: " (done)"; font-size: 12px; opacity: .7; }
+  main { flex: 1; padding: 20px; max-width: 900px; }
+  .bar { background: #ddd; height: 8px; border-radius: 4px; margin: 8px 0 14px; }
+  .bar div { background: #3a9a4a; height: 8px; border-radius: 4px; width: 0; }
+  h2 { margin-top: 0; }
+  .box { background: #fff; border: 1px solid #ccc; padding: 12px 14px; margin-bottom: 16px; }
+  .box h4 { margin: 0 0 8px; font-size: 16px; }
+  textarea { width: 100%; height: 150px; font-family: Consolas, monospace; font-size: 13px; padding: 8px; border: 1px solid #aaa; resize: vertical; }
+  iframe { width: 100%; height: 160px; border: 1px solid #aaa; background: #fff; margin-top: 8px; }
+  .small { font-size: 13px; color: #555; margin: 0 0 6px; }
+  .btns button { padding: 8px 14px; font-size: 14px; cursor: pointer; border: 1px solid #2a4d8f; background: #fff; border-radius: 3px; margin-right: 6px; }
+  .btns button.main { background: #2a4d8f; color: #fff; }
+  @media (max-width: 700px) { .wrap { flex-direction: column; } nav { width: 100%; border-right: 0; border-bottom: 1px solid #ccc; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Learn HTML step by step</h1>
+  <p>Read the definition, edit the code, and see the result right away.</p>
+</header>
+<div class="wrap">
+  <nav id="nav"></nav>
+  <main>
+    <div class="bar"><div id="bar"></div></div>
+    <p class="small" id="progress"></p>
+    <div id="content"></div>
+  </main>
+</div>
+
+<script>
+var topics = [
+{ level: "Basic", title: "Page structure",
+  def: "Every HTML page has the same skeleton. <b>&lt;!DOCTYPE html&gt;</b> tells the browser it is HTML5, <b>&lt;head&gt;</b> holds information about the page, and <b>&lt;body&gt;</b> holds what people see.",
+  ex: '<!DOCTYPE html>\n<html>\n<head>\n  <title>My Page</title>\n</head>\n<body>\n  <p>Hello, world!</p>\n<\/body>\n</html>',
+  real: '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>Ravi\'s Bakery</title>\n</head>\n<body>\n  <h1>Ravi\'s Bakery</h1>\n  <p>Fresh bread every morning from 6 AM.</p>\n<\/body>\n</html>' },
+{ level: "Basic", title: "Headings and paragraphs",
+  def: "Headings go from <b>&lt;h1&gt;</b> (most important) to <b>&lt;h6&gt;</b>. A paragraph is written with <b>&lt;p&gt;</b>. Use one h1 per page.",
+  ex: '<h1>Big heading</h1>\n<h2>Smaller heading</h2>\n<p>This is a paragraph.</p>\n<p>This is <b>bold</b> and <i>italic</i> text.</p>',
+  real: '<h1>How to Make Tea</h1>\n<h2>What you need</h2>\n<p>Water, tea leaves, milk and <b>sugar</b>.</p>\n<h2>Steps</h2>\n<p>Boil the water, add the leaves and wait <i>three minutes</i>.</p>' },
+{ level: "Basic", title: "Links",
+  def: "The <b>&lt;a&gt;</b> tag makes a link. The <b>href</b> attribute is the address. <b>target=\"_blank\"</b> opens the link in a new tab.",
+  ex: '<a href="https://www.wikipedia.org">Go to Wikipedia</a>\n<br>\n<a href="https://www.wikipedia.org" target="_blank">Open in new tab</a>',
+  real: '<p>Contact us:</p>\n<a href="mailto:hello@example.com">Send an email</a><br>\n<a href="tel:+911234567890">Call us</a><br>\n<a href="#bottom">Jump to the bottom</a>\n<div style="height:200px"></div>\n<p id="bottom">You reached the bottom.</p>' },
+{ level: "Basic", title: "Images",
+  def: "The <b>&lt;img&gt;</b> tag shows a picture. <b>src</b> is the file, <b>alt</b> is a text description used by screen readers and when the image fails to load. It has no closing tag.",
+  ex: '<img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27120%27 height=%2780%27%3E%3Crect width=%27120%27 height=%2780%27 fill=%27orange%27/%3E%3C/svg%3E" alt="Orange box" width="120">',
+  real: '<figure>\n  <img src="photo-that-does-not-exist.jpg" alt="A red bicycle leaning on a wall" width="200">\n  <figcaption>My new bicycle (the alt text shows because the file is missing)</figcaption>\n</figure>' },
+{ level: "Basic", title: "Lists",
+  def: "<b>&lt;ul&gt;</b> is a bullet list, <b>&lt;ol&gt;</b> is a numbered list, and each item is an <b>&lt;li&gt;</b>.",
+  ex: '<ul>\n  <li>Apple</li>\n  <li>Banana</li>\n</ul>\n<ol>\n  <li>First</li>\n  <li>Second</li>\n</ol>',
+  real: '<h3>Shopping list</h3>\n<ul>\n  <li>Milk</li>\n  <li>Eggs</li>\n  <li>Rice\n    <ul>\n      <li>Basmati</li>\n      <li>Matta</li>\n    </ul>\n  </li>\n</ul>' },
+{ level: "Basic", title: "Tables",
+  def: "A table has rows <b>&lt;tr&gt;</b>, header cells <b>&lt;th&gt;</b> and data cells <b>&lt;td&gt;</b>. Use <b>colspan</b> to join columns.",
+  ex: '<table border="1">\n  <tr><th>Name</th><th>Age</th></tr>\n  <tr><td>Anu</td><td>21</td></tr>\n  <tr><td>Ben</td><td>22</td></tr>\n</table>',
+  real: '<table border="1" cellpadding="6">\n  <thead>\n    <tr><th>Subject</th><th>Marks</th></tr>\n  </thead>\n  <tbody>\n    <tr><td>Maths</td><td>88</td></tr>\n    <tr><td>Physics</td><td>79</td></tr>\n  </tbody>\n  <tfoot>\n    <tr><td>Total</td><td>167</td></tr>\n  </tfoot>\n</table>' },
+{ level: "Intermediate", title: "Div, span, class and id",
+  def: "<b>&lt;div&gt;</b> is a block container and <b>&lt;span&gt;</b> is an inline container. <b>class</b> can be used on many elements, <b>id</b> must be unique. They are used to style parts of a page.",
+  ex: '<style>\n  .red { color: red; }\n  #title { font-size: 24px; }\n</style>\n<div id="title">Title</div>\n<p>Some <span class="red">red</span> text.</p>',
+  real: '<style>\n  .card { border: 1px solid #999; padding: 10px; width: 200px; }\n  .price { color: green; font-weight: bold; }\n</style>\n<div class="card">\n  <h3>Headphones</h3>\n  <p>Price: <span class="price">Rs. 999</span></p>\n</div>' },
+{ level: "Intermediate", title: "Forms and inputs",
+  def: "A <b>&lt;form&gt;</b> collects data from the user. Inside it you use <b>&lt;input&gt;</b>, <b>&lt;select&gt;</b>, <b>&lt;textarea&gt;</b> and a <b>&lt;button&gt;</b>. Each input needs a <b>&lt;label&gt;</b>.",
+  ex: '<form>\n  <label>Name: <input type="text"></label><br><br>\n  <label>Color:\n    <select><option>Red</option><option>Blue</option></select>\n  </label><br><br>\n  <button type="button">Send</button>\n</form>',
+  real: '<h3>Login</h3>\n<form>\n  <label for="u">Username</label><br>\n  <input type="text" id="u" name="user" placeholder="Enter username"><br><br>\n  <label for="p">Password</label><br>\n  <input type="password" id="p" name="pass"><br><br>\n  <input type="checkbox" id="r"> <label for="r">Remember me</label><br><br>\n  <button type="submit">Login</button>\n</form>' },
+{ level: "Intermediate", title: "Semantic tags",
+  def: "Semantic tags describe the meaning of a part of the page: <b>header, nav, main, section, article, aside, footer</b>. They help search engines and screen readers, and are better than many divs.",
+  ex: '<header>My Site</header>\n<nav>Home | About</nav>\n<main>\n  <article>Main content here</article>\n</main>\n<footer>Copyright 2026</footer>',
+  real: '<header><h2>Daily News</h2></header>\n<nav><a href="#">Home</a> | <a href="#">Sports</a></nav>\n<main>\n  <article>\n    <h3>Rain expected this week</h3>\n    <p>Heavy rain is expected in the coast.</p>\n  </article>\n  <aside><b>Weather:</b> 28 C</aside>\n</main>\n<footer>Daily News 2026</footer>' },
+{ level: "Intermediate", title: "Audio and video",
+  def: "<b>&lt;audio&gt;</b> and <b>&lt;video&gt;</b> play media without plugins. Add <b>controls</b> to show play and pause buttons.",
+  ex: '<video width="240" controls>\n  <source src="movie.mp4" type="video/mp4">\n  Your browser does not support video.\n</video>',
+  real: '<h3>Lecture 1</h3>\n<video width="260" controls poster="">\n  <source src="lecture1.mp4" type="video/mp4">\n  Video not found. Put your own lecture1.mp4 in the same folder.\n</video>\n<audio controls>\n  <source src="notes.mp3" type="audio/mpeg">\n</audio>' },
+{ level: "Intermediate", title: "Iframes",
+  def: "An <b>&lt;iframe&gt;</b> shows another web page inside your page. It is used for maps, videos and widgets. Always add a <b>title</b>.",
+  ex: '<iframe src="https://example.com" title="Example page" width="100%" height="100"></iframe>',
+  real: '<h3>Find our shop</h3>\n<iframe\n  src="https://www.openstreetmap.org/export/embed.html?bbox=76.2,9.9,76.3,10.0"\n  title="Shop location map"\n  width="100%" height="120"></iframe>' },
+{ level: "Advanced", title: "Form validation",
+  def: "HTML can check input before sending: <b>required</b>, <b>minlength</b>, <b>pattern</b>, and special types like <b>email</b>, <b>number</b> and <b>date</b>. No JavaScript is needed.",
+  ex: '<form>\n  <input type="email" placeholder="Email" required>\n  <button>Submit</button>\n</form>\n<p>Try submitting with a wrong email.</p>',
+  real: '<form>\n  <label>Email<br><input type="email" required></label><br><br>\n  <label>Phone (10 digits)<br>\n    <input type="text" pattern="[0-9]{10}" title="Enter 10 digits" required></label><br><br>\n  <label>Age (18-60)<br>\n    <input type="number" min="18" max="60" required></label><br><br>\n  <button>Register</button>\n</form>' },
+{ level: "Advanced", title: "Meta tags and responsive pages",
+  def: "<b>&lt;meta&gt;</b> tags give the browser information. The viewport meta tag makes a page fit phone screens. Others set the character set, description and author.",
+  ex: '<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="description" content="A page about HTML">\n  <title>Meta example</title>\n</head>\n<body><p>Look at the code in the head.</p><\/body>',
+  real: '<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="description" content="Handmade soaps from Kerala">\n  <meta name="author" content="Soap Shop">\n  <title>Soap Shop</title>\n</head>\n<body>\n  <h1>Soap Shop</h1>\n  <p>The description above is what Google may show in search results.</p>\n<\/body>' },
+{ level: "Advanced", title: "Details, summary and dialog",
+  def: "<b>&lt;details&gt;</b> makes content that opens and closes when the <b>&lt;summary&gt;</b> is clicked. <b>&lt;dialog&gt;</b> makes a popup box. Both work with little or no JavaScript.",
+  ex: '<details>\n  <summary>Click to open</summary>\n  <p>Hidden text is now visible.</p>\n</details>',
+  real: '<h3>FAQ</h3>\n<details>\n  <summary>How long is delivery?</summary>\n  <p>Usually 3 to 5 days.</p>\n</details>\n<details>\n  <summary>Can I return an item?</summary>\n  <p>Yes, within 7 days.</p>\n</details>\n<br>\n<dialog id="d"><p>Order placed!</p><button onclick="d.close()">Close</button></dialog>\n<button onclick="d.showModal()">Place order</button>' },
+{ level: "Advanced", title: "Data attributes",
+  def: "Attributes starting with <b>data-</b> let you store your own information on an element. JavaScript can read them. They do not show on the page.",
+  ex: '<button data-color="blue" onclick="alert(this.dataset.color)">Show my data</button>',
+  real: '<button data-id="101" data-name="Pen" onclick="show(this)">Pen</button>\n<button data-id="102" data-name="Book" onclick="show(this)">Book</button>\n<p id="out">Click a product.</p>\n<script>\n  function show(b) {\n    out.textContent = "Product " + b.dataset.id + ": " + b.dataset.name;\n  }\n<\/script>' },
+{ level: "Advanced", title: "Accessibility (ARIA)",
+  def: "Accessibility makes your page usable for everyone, including people using screen readers. Use alt text, labels, semantic tags, and <b>aria-</b> attributes when normal HTML is not enough.",
+  ex: '<button aria-label="Close menu">X</button>\n<img src="" alt="Company logo">',
+  real: '<nav aria-label="Main menu">\n  <a href="#">Home</a> | <a href="#">Shop</a>\n</nav>\n<button aria-label="Search" style="font-size:20px">&#128269;</button>\n<div role="alert" style="color:red">Please fill all fields.</div>\n<p>The button has only an icon, so aria-label tells screen readers what it does.</p>' },
+{ level: "Advanced", title: "SVG and Canvas",
+  def: "<b>&lt;svg&gt;</b> draws shapes that stay sharp at any size. <b>&lt;canvas&gt;</b> is a drawing area controlled with JavaScript, used for charts and games.",
+  ex: '<svg width="200" height="100">\n  <circle cx="50" cy="50" r="40" fill="tomato"/>\n  <rect x="110" y="20" width="70" height="60" fill="steelblue"/>\n</svg>',
+  real: '<canvas id="c" width="260" height="120" style="border:1px solid #999"></canvas>\n<script>\n  var ctx = c.getContext("2d");\n  var data = [40, 90, 60, 100];\n  for (var i = 0; i < data.length; i++) {\n    ctx.fillStyle = "seagreen";\n    ctx.fillRect(20 + i * 60, 120 - data[i], 40, data[i]);\n  }\n<\/script>\n<p>A simple bar chart.</p>' }
+];
+
+var current = 0, done = {};
+try { done = JSON.parse(localStorage.getItem("htmlDone") || "{}"); } catch (e) {}
+
+function save() { try { localStorage.setItem("htmlDone", JSON.stringify(done)); } catch (e) {} }
+
+function makeNav() {
+  var html = "", lvl = "";
+  topics.forEach(function (t, i) {
+    if (t.level !== lvl) { lvl = t.level; html += "<h3>" + lvl + "</h3>"; }
+    html += '<button id="n' + i + '" onclick="show(' + i + ')" class="' + (done[i] ? "done" : "") + '">' + t.title + "</button>";
+  });
+  document.getElementById("nav").innerHTML = html;
+}
+
+function codeBox(id, title, note, code) {
+  return '<div class="box"><h4>' + title + '</h4><p class="small">' + note + '</p>' +
+    '<textarea id="t' + id + '" spellcheck="false"></textarea>' +
+    '<div class="btns" style="margin-top:6px"><button class="main" onclick="run(' + id + ')">Run</button>' +
+    '<button onclick="reset(' + id + ')">Reset</button></div>' +
+    '<iframe id="f' + id + '" title="Result"></iframe></div>';
+}
+
+function show(i) {
+  current = i;
+  var t = topics[i];
+  document.getElementById("content").innerHTML =
+    "<h2>" + t.title + " <small style='font-size:14px;color:#777'>(" + t.level + ")</small></h2>" +
+    '<div class="box"><h4>Definition</h4><p style="margin:0">' + t.def + "</p></div>" +
+    codeBox(1, "Example", "A small example. Change the code and press Run.", t.ex) +
+    codeBox(2, "Real-life example", "How this is used in a real page.", t.real) +
+    '<div class="btns"><button onclick="show(' + Math.max(0, i - 1) + ')">Previous</button>' +
+    '<button onclick="mark()">' + (done[i] ? "Mark as not done" : "Mark as done") + '</button>' +
+    '<button class="main" onclick="show(' + Math.min(topics.length - 1, i + 1) + ')">Next</button></div>';
+  reset(1); reset(2);
+  [1, 2].forEach(function (n) {
+    document.getElementById("t" + n).oninput = function () { clearTimeout(window["tm" + n]); window["tm" + n] = setTimeout(function () { run(n); }, 500); };
+  });
+  document.querySelectorAll("nav button").forEach(function (b) { b.classList.remove("active"); });
+  document.getElementById("n" + i).classList.add("active");
+  updateBar();
+  window.scrollTo(0, 0);
+}
+
+function reset(n) {
+  document.getElementById("t" + n).value = n === 1 ? topics[current].ex : topics[current].real;
+  run(n);
+}
+
+function run(n) {
+  var code = document.getElementById("t" + n).value;
+  var base = '<style>body{font-family:Arial;font-size:15px;margin:10px}</style>';
+  document.getElementById("f" + n).srcdoc = base + code;
+}
+
+function mark() {
+  if (done[current]) delete done[current]; else done[current] = true;
+  save(); makeNav(); show(current);
+}
+
+function updateBar() {
+  var count = Object.keys(done).length;
+  document.getElementById("bar").style.width = (count / topics.length * 100) + "%";
+  document.getElementById("progress").textContent = count + " of " + topics.length + " topics completed";
+}
+
+makeNav();
+show(0);
+</script>
+</body>
+</html>
